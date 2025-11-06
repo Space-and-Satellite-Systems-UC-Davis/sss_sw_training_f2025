@@ -10,13 +10,28 @@
 
 #include "gpio_training.h"
 
-void gpio_high(GPIO_TypeDef *port, int pin) {}
+void gpio_high(GPIO_TypeDef *port, int pin) {
+	port->BSRR |= (1U << pin);
+}
 
-void gpio_low(GPIO_TypeDef *port, int pin) {}
+void gpio_low(GPIO_TypeDef *port, int pin) {
+	port->BSRR |= (1U << (pin+16));
+}	
 
-void gpio_set(GPIO_TypeDef *port, int pin, GPIO_VALUE value) {}
+void gpio_set(GPIO_TypeDef *port, int pin, GPIO_VALUE value) {
+	if (GPIO_LOW) gpio_low(port, pin);
+	else gpio_high(port, pin);
+}
 
-void gpio_configureMode(GPIO_TypeDef *port, int pin, GPIO_CNF cnf, GPIO_MODE mode) {}
+void gpio_configureMode(GPIO_TypeDef *port, int pin, GPIO_CNF cnf, GPIO_MODE mode) {
+	if (pin <= 7) { // 0 - 7
+		port->CRL |= (mode << (pin * 4));
+		port->CRL |= (cnf << (2 + pin * 4));
+	} else { // 7 - 15
+		port->CRH |= (mode << ((pin-8) * 4));
+		port->CRH |= (cnf << (2 + (pin-8) * 4));
+	}
+}
 
 /*
  * Pls don't modify cause I will be sad D:
