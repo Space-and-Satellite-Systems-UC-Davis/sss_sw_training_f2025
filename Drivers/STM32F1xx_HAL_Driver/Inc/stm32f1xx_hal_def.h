@@ -26,6 +26,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f1xx.h"
 #include "Legacy/stm32_hal_legacy.h"
 #include <stddef.h>
 
@@ -50,8 +51,6 @@ typedef enum
   HAL_UNLOCKED = 0x00U,
   HAL_LOCKED   = 0x01U
 } HAL_LockTypeDef;
-
-#include "stm32f1xx.h"
 
 /* Exported macro ------------------------------------------------------------*/
 #define HAL_MAX_DELAY      0xFFFFFFFFU
